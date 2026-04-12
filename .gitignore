@@ -1,0 +1,38 @@
+# Banco de dados
+db.sqlite3
+*.sqlite3
+
+# Documentos internos (não enviar para o repositório)
+conversas_projeto.txt
+docs_projeto.txt
+INFORMACOES_COMPLETA_PROJETO_IURD.md
+
+# Arquivos do sistema
+.agent/
+.mcp.json
+nul
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+*.egg-info/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Django
+*.log
+local_settings.py
+
+# Ambiente
+.env
+.env.local
+
+# Ruff
+.ruff_cache/

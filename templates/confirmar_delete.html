@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar Exclusão - Sistema EPI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .delete-card {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        border-radius: 15px;
+        padding: 30px;
+        color: white;
+        text-align: center;
+    }
+    
+    .delete-card i {
+        font-size: 60px;
+        margin-bottom: 15px;
+    }
+    
+    .warning-box {
+        background: #fff3cd;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Confirmar Exclusão</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="delete-card mb-4">
+                    <i class="fas fa-user-times"></i>
+                    <h4>Excluir Colaborador</h4>
+                </div>
+                
+                <p>Tem certeza que deseja excluir o colaborador <strong>{{ colaborador.nome_completo }}</strong>?</p>
+                <div class="warning-box">
+                    <p class="mb-0 text-muted"><i class="fas fa-id-card me-2"></i>Matrícula: {{ colaborador.matricula }}</p>
+                </div>
+                
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i><strong>Atenção:</strong> Esta ação não pode ser desfeita e também excluirá todos os registros de EPI deste colaborador.
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger flex-grow-1 py-2">
+                            <i class="fas fa-trash me-2"></i> Excluir
+                        </button>
+                        <a href="{% url 'cadastrar_colaborador' %}" class="btn btn-secondary flex-grow-1 py-2">
+                            <i class="fas fa-arrow-left me-2"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

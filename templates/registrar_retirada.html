@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Retirada - Sistema EPI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px 15px;
+    }
+    
+    .empty-state {
+        padding: 40px;
+        text-align: center;
+        color: #999;
+    }
+    
+    .empty-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+    
+    .data-badge {
+        background: linear-gradient(135deg, #43e97b, #38f9d7);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.85rem;
+    }
+    
+    .qtd-badge {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-clipboard-check me-2"></i> Nova Retirada</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-user me-1"></i> Colaborador</label>
+                        {{ form.colaborador }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-shield-alt me-1"></i> EPI</label>
+                        {{ form.epi }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-plus-circle me-1"></i> Quantidade</label>
+                        {{ form.quantidade }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="fas fa-check me-2"></i> Registrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-history me-2"></i> Histórico de Retiradas</h5>
+            </div>
+            <div class="card-body">
+                {% if registros %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-calendar"></i> Data</th>
+                                <th><i class="fas fa-user"></i> Colaborador</th>
+                                <th><i class="fas fa-shield-alt"></i> EPI</th>
+                                <th><i class="fas fa-certificate"></i> CA</th>
+                                <th><i class="fas fa-box"></i> Qtd</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reg in registros %}
+                            <tr>
+                                <td><span class="data-badge">{{ reg.data_retirada|date:"d/m/Y" }}</span></td>
+                                <td><strong>{{ reg.colaborador.nome_completo }}</strong></td>
+                                <td>{{ reg.epi.descricao|truncatechars:30 }}</td>
+                                <td><span class="badge bg-primary">{{ reg.epi.ca }}</span></td>
+                                <td><span class="qtd-badge">{{ reg.quantidade }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>Nenhuma retirada registrada ainda.</p>
+                    <p class="small">Registre a primeira retirada usando o formulário ao lado.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

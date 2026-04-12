@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Colaborador - Sistema EPI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px 15px;
+    }
+    
+    .empty-state {
+        padding: 40px;
+        text-align: center;
+        color: #999;
+    }
+    
+    .empty-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+    
+    .badge-matricula {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+    }
+    
+    .badge-funcao {
+        background: linear-gradient(135deg, #f093fb, #f5576c);
+    }
+    
+    .badge-setor {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+    }
+    
+    .action-buttons .btn {
+        width: 35px;
+        height: 35px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+    
+    .progress-container {
+        margin-bottom: 20px;
+    }
+    
+    .progress-bar-wrapper {
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 5px;
+    }
+    
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 10px;
+        transition: width 0.4s ease;
+    }
+    
+    .progress-text {
+        font-size: 0.85rem;
+        color: #666;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .progress-text span.complete { color: #28a745; }
+    .progress-text span.incomplete { color: #dc3545; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-user-plus me-2"></i> Novo Colaborador</h5>
+            </div>
+            <div class="card-body">
+                <div class="progress-container">
+                    <div class="progress-text">
+                        <span>Progresso do formulário</span>
+                        <span id="progress-count">0/4 completo</span>
+                    </div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <form method="post" id="colaborador-form">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-user me-1"></i> Nome Completo</label>
+                        {{ form.nome_completo }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-id-card me-1"></i> Matrícula</label>
+                        {{ form.matricula }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-briefcase me-1"></i> Função</label>
+                        {{ form.funcao }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-building me-1"></i> Setor</label>
+                        {{ form.setor }}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="fas fa-save me-2"></i> Cadastrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i> Colaboradores Cadastrados</h5>
+            </div>
+            <div class="card-body">
+                {% if colaboradores %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-id-card"></i> Matrícula</th>
+                                <th><i class="fas fa-user"></i> Nome</th>
+                                <th><i class="fas fa-briefcase"></i> Função</th>
+                                <th><i class="fas fa-building"></i> Setor</th>
+                                <th><i class="fas fa-cogs"></i> Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for colab in colaboradores %}
+                            <tr>
+                                <td><span class="badge badge-matricula">{{ colab.matricula }}</span></td>
+                                <td><strong>{{ colab.nome_completo }}</strong></td>
+                                <td><span class="badge badge-funcao">{{ colab.funcao }}</span></td>
+                                <td><span class="badge badge-setor">{{ colab.setor }}</span></td>
+                                <td class="action-buttons">
+                                    <a href="{% url 'editar_colaborador' colab.id %}" class="btn btn-primary" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'deletar_colaborador' colab.id %}" class="btn btn-danger" title="Deletar" onclick="return confirm('Tem certeza que deseja excluir?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-users-slash"></i>
+                    <p>Nenhum colaborador cadastrado ainda.</p>
+                    <p class="small">Cadastre o primeiro colaborador usando o formulário ao lado.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('colaborador-form');
+    const inputs = form.querySelectorAll('input');
+    const progressBar = document.getElementById('progress-bar');
+    const progressCount = document.getElementById('progress-count');
+    const totalFields = inputs.length;
+    
+    function updateProgress() {
+        let filled = 0;
+        inputs.forEach(input => {
+            if (input.value.trim() !== '') {
+                filled++;
+            }
+        });
+        const percent = (filled / totalFields) * 100;
+        progressBar.style.width = percent + '%';
+        progressCount.textContent = `${filled}/${totalFields} completo`;
+        
+        if (filled === totalFields) {
+            progressCount.innerHTML = '<span class="complete">✓ Formulário completo</span>';
+        }
+    }
+    
+    inputs.forEach(input => {
+        input.addEventListener('input', updateProgress);
+    });
+});
+</script>
+{% endblock %}

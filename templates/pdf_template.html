@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>EPIs do Colaborador - {{ colaborador.matricula }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #2c3e50;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 25mm 20mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #1a237e;
+            text-align: center;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo-box {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
+        }
+        
+        .header-title h1 {
+            font-size: 26px;
+            color: #1a237e;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+        
+        .header-title p {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .header-right {
+            text-align: right;
+        }
+        
+        .header-right .org-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 5px;
+        }
+        
+        .header-right .doc-info {
+            font-size: 10px;
+            color: #888;
+        }
+        
+        .doc-meta {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #1a237e;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+            text-align: justify;
+        }
+        
+        .doc-meta h2 {
+            font-size: 18px;
+            color: #1a237e;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .doc-meta p {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .section-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a237e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .collaborator-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .collaborator-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .collaborator-body {
+            padding: 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .info-box {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 6px;
+            border-left: 3px solid #3949ab;
+        }
+        
+        .table-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f5f5f5;
+        }
+        
+        th {
+            padding: 14px 15px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a237e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+        
+        td {
+            padding: 14px 15px;
+            font-size: 12px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #fafbfc;
+        }
+        
+        tbody tr:nth-child(even):hover {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .epi-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .ca-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+            color: #1a237e;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .quantity {
+            display: inline-block;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2e7d32;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .date {
+            color: #666;
+            font-size: 10px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-active {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-state .icon {
+            font-size: 40px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-left {
+            text-align: left;
+        }
+        
+        .footer-left .org {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a237e;
+        }
+        
+        .footer-left .system {
+            font-size: 9px;
+            color: #888;
+            margin-top: 3px;
+        }
+        
+        .footer-right {
+            text-align: right;
+        }
+        
+        .footer-right .date {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .footer-right .page-num {
+            font-size: 9px;
+            color: #aaa;
+            margin-top: 3px;
+        }
+        
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.1;
+            font-size: 60px;
+            font-weight: 700;
+            color: #1a237e;
+            transform: rotate(-30deg);
+            pointer-events: none;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .page {
+                box-shadow: none;
+                margin: 0;
+                padding: 20mm;
+            }
+            
+            .header, .collaborator-header, .table-header {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="header-top">
+                <div class="logo-box">EPI</div>
+                <div class="header-right">
+                    <div class="org-name">IURD</div>
+                    <div class="doc-info">Igreja Universal do Reino de Deus</div>
+                </div>
+            </div>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1>RELATÓRIO DE EPI</h1>
+                    <p>Controle de Equipamentos de Proteção Individual</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="doc-meta">
+            <h2>📋 Demonstrativo de Entrega de EPIs</h2>
+            <p>Documento gerado automaticamente pelo sistema de controle. Este relatório apresenta todos os equipamentos de proteção individual distribuídos ao colaborador.</p>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">👤</div>
+                <div class="section-title">Dados do Colaborador</div>
+            </div>
+            
+            <div class="collaborator-card">
+                <div class="collaborator-header">
+                    <span>📁</span> Informações Pessoais
+                </div>
+                <div class="collaborator-body">
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <span class="info-label">Nome Completo</span>
+                            <span class="info-value">{{ colaborador.nome_completo }}</span>
+                        </div>
+                        <div class="info-box">
+                            <span class="info-label">Matrícula</span>
+                            <span class="info-value">{{ colaborador.matricula }}</span>
+                        </div>
+                        <div class="info-box">
+                            <span class="info-label">Função</span>
+                            <span class="info-value">{{ colaborador.funcao }}</span>
+                        </div>
+                        <div class="info-box">
+                            <span class="info-label">Setor</span>
+                            <span class="info-value">{{ colaborador.setor }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">📦</div>
+                <div class="section-title">Histórico de EPIs Recebidos</div>
+            </div>
+            
+            <div class="table-card">
+                <div class="table-header">
+                    <span>📋</span> Registros de Entrega ({{ registros.count }})
+                </div>
+                <div class="table-container">
+                    {% if registros %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Equipamento</th>
+                                <th>Certificado CA</th>
+                                <th>Qtd</th>
+                                <th>Data Entrega</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reg in registros %}
+                            <tr>
+                                <td>
+                                    <span class="epi-name">{{ reg.epi.descricao }}</span>
+                                </td>
+                                <td>
+                                    <span class="ca-number">CA {{ reg.epi.ca }}</span>
+                                </td>
+                                <td>
+                                    <span class="quantity">{{ reg.quantidade }}</span>
+                                </td>
+                                <td>
+                                    <span class="date">{{ reg.data_retirada|date:"d/m/Y" }}</span>
+                                </td>
+                                <td>
+                                    <span class="status-badge status-active">Entregue</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>Nenhum registro de EPI encontrado para este colaborador.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-left">
+                <div class="org">Igreja Universal do Reino de Deus</div>
+                <div class="system">Sistema de Controle de EPI v1.0</div>
+            </div>
+            <div class="footer-right">
+                <div class="date">Emitido em {% now "d/m/Y às H:i" %}</div>
+                <div class="page-num">Página 1</div>
+            </div>
+        </div>
+        
+        <div class="watermark">IURD</div>
+    </div>
+</body>
+</html>

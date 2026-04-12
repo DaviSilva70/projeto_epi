@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar EPI - Sistema EPI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px 15px;
+    }
+    
+    .image-upload-wrapper {
+        border: 2px dashed #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .image-upload-wrapper:hover {
+        border-color: var(--primary-color);
+        background: rgba(0, 3, 40, 0.02);
+    }
+    
+    .image-upload-wrapper input[type="file"] {
+        display: none;
+    }
+    
+    .image-preview {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin: 10px auto;
+        display: block;
+    }
+    
+    .table img {
+        transition: transform 0.3s ease;
+    }
+    
+    .table img:hover {
+        transform: scale(1.2);
+    }
+    
+    .empty-state {
+        padding: 40px;
+        text-align: center;
+        color: #999;
+    }
+    
+    .empty-state i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+    
+    .search-box .form-control {
+        border-radius: 20px;
+        padding-left: 20px;
+    }
+    
+    .search-box .btn {
+        border-radius: 20px;
+    }
+    
+    .progress-container {
+        margin-bottom: 20px;
+    }
+    
+    .progress-bar-wrapper {
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 5px;
+    }
+    
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 10px;
+        transition: width 0.4s ease;
+    }
+    
+    .progress-text {
+        font-size: 0.85rem;
+        color: #666;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .progress-text span.complete { color: #28a745; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i> Novo EPI</h5>
+            </div>
+            <div class="card-body">
+                <div class="progress-container">
+                    <div class="progress-text">
+                        <span>Progresso do formulário</span>
+                        <span id="progress-count">0/3 completo</span>
+                    </div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <form method="post" enctype="multipart/form-data" id="epi-form">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-certificate me-1"></i> CA (Certificado de Aprovação)</label>
+                        {{ form.ca }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-align-left me-1"></i> Descrição Completa</label>
+                        {{ form.descricao }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-camera me-1"></i> Foto do EPI</label>
+                        <label class="image-upload-wrapper d-block">
+                            <input type="file" name="foto" accept="image/*" id="id_foto">
+                            <i class="fas fa-cloud-upload-alt fa-2x text-muted"></i>
+                            <p class="text-muted mb-0 mt-2">Clique ou arraste a imagem</p>
+                            <img id="preview" class="image-preview d-none">
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="fas fa-save me-2"></i> Cadastrar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i> EPIs Cadastrados</h5>
+                <form method="get" class="search-box d-flex">
+                    <input type="text" name="q" class="form-control" placeholder="Buscar por CA ou descrição..." value="{{ request.GET.q|default:'' }}">
+                    <button type="submit" class="btn btn-light ms-2">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="card-body">
+                {% if epis %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-certificate"></i> CA</th>
+                                <th><i class="fas fa-align-left"></i> Descrição</th>
+                                <th><i class="fas fa-camera"></i> Foto</th>
+                                <th><i class="fas fa-calendar"></i> Data Cadastro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for epi in epis %}
+                            <tr>
+                                <td><span class="badge bg-primary">{{ epi.ca }}</span></td>
+                                <td>{{ epi.descricao|truncatechars:40 }}</td>
+                                <td>
+                                    {% if epi.foto %}
+                                        <img src="{{ epi.foto.url }}" alt="Foto EPI" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+                                    {% else %}
+                                        <span class="text-muted"><i class="fas fa-image"></i> Sem foto</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ epi.created_at|date:"d/m/Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>Nenhum EPI cadastrado ainda.</p>
+                    <p class="small">Cadastre o primeiro EPI usando o formulário ao lado.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.getElementById('id_foto').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('preview');
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('epi-form');
+        const caInput = form.querySelector('[name="ca"]');
+        const descInput = form.querySelector('[name="descricao"]');
+        const progressBar = document.getElementById('progress-bar');
+        const progressCount = document.getElementById('progress-count');
+        
+        function updateProgress() {
+            let filled = 0;
+            if (caInput.value.trim() !== '') filled++;
+            if (descInput.value.trim() !== '') filled++;
+            
+            const percent = (filled / 2) * 100;
+            progressBar.style.width = percent + '%';
+            progressCount.textContent = `${filled}/3 completo`;
+            
+            const fotoInput = document.getElementById('id_foto');
+            if (fotoInput && fotoInput.files.length > 0) {
+                progressBar.style.width = '100%';
+                progressCount.innerHTML = '<span class="complete">✓ Formulário completo</span>';
+            }
+        }
+        
+        [caInput, descInput].forEach(input => {
+            input.addEventListener('input', updateProgress);
+        });
+        
+        document.getElementById('id_foto').addEventListener('change', updateProgress);
+    });
+</script>
+{% endblock %}
+{% endblock %}

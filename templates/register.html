@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Sistema de EPI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000328;
+            --secondary-color: #1a1a4a;
+            --accent-color: #2d2d6a;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .register-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .register-header i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .register-body {
+            padding: 40px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 3, 40, 0.25);
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            width: 100%;
+        }
+        
+        .btn-register:hover {
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+        }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .error-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .error-list li {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-card">
+        <div class="register-header">
+            <i class="fas fa-user-plus"></i>
+            <h3 class="mb-0">Criar Conta</h3>
+            <p class="mb-0">Sistema de EPI - IURD</p>
+        </div>
+        <div class="register-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label">Nome de Usuário</label>
+                    <input type="text" name="username" class="form-control" required>
+                    <div class="form-text">150 caracteres ou menos. Apenas letras, números e @/./+/-/_</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Senha</label>
+                    <input type="password" name="password1" class="form-control" required>
+                    <div class="form-text">
+                        <ul class="help-text">
+                            <li>Sua senha não pode ser muito similar ao seu nome de usuário.</li>
+                            <li>Sua senha deve ter pelo menos 8 caracteres.</li>
+                            <li>Sua senha não pode ser uma senha comum.</li>
+                            <li>Sua senha não pode ser totalmente numérica.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Confirmar Senha</label>
+                    <input type="password" name="password2" class="form-control" required>
+                    <div class="form-text">Digite a mesma senha para confirmação.</div>
+                </div>
+                
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul class="error-list">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <button type="submit" class="btn btn-primary btn-register">
+                    <i class="fas fa-user-plus me-2"></i> Criar Conta
+                </button>
+            </form>
+            
+            <hr>
+            
+            <div class="text-center">
+                <p class="mb-0">Já tem uma conta?</p>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-sign-in-alt me-1"></i> Fazer Login
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
