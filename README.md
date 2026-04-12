@@ -39,7 +39,7 @@ Sistema Django para gerenciamento de Equipamentos de Proteção Individual (EPI)
 ## Como rodar
 
 ```bash
-cd H:\Projeto_EPI_IURD
+cd H:\Projeto_EPI
 venv\Scripts\python.exe manage.py runserver
 ```
 
@@ -79,7 +79,7 @@ O sistema conta com:
 - Estatísticas em tempo real
 - Design responsivo para mobile e desktop
 - **PDF profissional** com layout otimizado para A4:
-  - Cabeçalho com logo e informações da IURD
+  - Cabeçalho com logo e informações.
   - Cards de dados do colaborador
   - Tabela estilizada com badges visuais
   - Rodapé com data de emissão
