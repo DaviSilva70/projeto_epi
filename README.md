@@ -1,4 +1,4 @@
-# Sistema de Controle de EPI - IURD
+# Sistema de Controle de EPI 
 
 Sistema Django para gerenciamento de Equipamentos de Proteção Individual (EPI) para a Igreja Universal do Reino de Deus.
 
