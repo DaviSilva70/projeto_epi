@@ -79,6 +79,13 @@
             <p class="mb-0">Igreja Universal do Reino de Deus</p>
         </div>
         <div class="login-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} mb-3" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% if form.errors %}
                 <div class="alert alert-danger">
                     Usuário ou senha incorretos.
@@ -102,12 +109,14 @@
             
             <hr>
             
+            {% if ALLOW_SELF_REGISTRATION %}
             <div class="text-center">
                 <p class="mb-2">Não tem uma conta?</p>
                 <a href="{% url 'register' %}" class="btn btn-outline-primary btn-sm">
                     <i class="fas fa-user-plus me-1"></i> Criar Conta
                 </a>
             </div>
+            {% endif %}
         </div>
     </div>
 </body>

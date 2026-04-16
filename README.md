@@ -31,19 +31,50 @@ Sistema Django para gerenciamento de Equipamentos de Proteção Individual (EPI)
 
 ## Tecnologias
 
-- **Backend**: Django 5.x
+- **Backend**: Django 6.0.3
 - **Frontend**: Bootstrap 5, Font Awesome 6
 - **PDF**: xhtml2pdf
-- **Banco de dados**: SQLite3
+- **Banco de dados**: MySQL 9.x (configurável via variáveis de ambiente)
 
 ## Como rodar
 
 ```bash
-cd H:\Projeto_EPI
-venv\Scripts\python.exe manage.py runserver
+cd H:\Projeto_EPI_IURD
+python manage.py runserver
 ```
 
 Acesse: http://127.0.0.1:8000
+
+## Configuração de ambiente
+
+O projeto utiliza variáveis de ambiente para configuração. Crie um arquivo `.env` na raiz do projeto:
+
+```env
+DEBUG=True
+DJANGO_SECRET_KEY=sua-chave-secreta
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+# Banco de dados MySQL
+DB_ENGINE=mysql
+DB_NAME=universal_epi
+DB_USER=root
+DB_PASSWORD=
+DB_HOST=127.0.0.1
+DB_PORT=3306
+
+# Configurações adicionais
+ALLOW_SELF_REGISTRATION=True
+LIST_PAGE_SIZE=10
+```
+
+Para produção, defina:
+
+```env
+DEBUG=False
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
+```
 
 ## Estrutura do projeto
 
@@ -54,22 +85,38 @@ projetoepi/
 │   ├── views.py        # Views (cadastro, busca, PDF)
 │   ├── forms.py        # Formulários
 │   ├── urls.py         # Rotas
-│   └── admin.py        # Admin Django
+│   ├── admin.py        # Admin Django
+│   └── context_processors.py  # Variáveis globais
 ├── templates/          # Templates HTML
 │   ├── base.html       # Template base
 │   ├── home.html       # Página inicial
+│   ├── login.html      # Login
 │   └── ...
+├── projetoepi/         # Configurações Django
+│   ├── settings.py     # Configurações principais
+│   └── urls.py         # URLs globais
 ├── media/              # Arquivos de mídia (fotos)
+├── .env               # Variáveis de ambiente
 ├── manage.py
 └── requirements.txt    # Dependências
+```
+
+## Dependências
+
+```
+Django==6.0.3
+Pillow==12.2.0
+xhtml2pdf==0.2.17
+reportlab==4.4.10
+PyMySQL==1.1.0
+python-dotenv==1.0.0
 ```
 
 ## Requisitos
 
 - Python 3.13+
-- Django 5.x
-- xhtml2pdf
-- Pillow
+- MySQL Server 8.0+ (ou superior)
+- Django 6.x
 
 ## Screenshots
 

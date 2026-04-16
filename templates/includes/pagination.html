@@ -1,0 +1,21 @@
+{% if page_obj.has_other_pages %}
+<nav aria-label="Paginação" class="mt-4">
+    <ul class="pagination justify-content-center mb-0">
+        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_previous %}?{% if query_string %}{{ query_string }}&{% endif %}page=1{% else %}#{% endif %}">Primeira</a>
+        </li>
+        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_previous %}?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">Anterior</a>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+        </li>
+        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_next %}?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}{% else %}#{% endif %}">Próxima</a>
+        </li>
+        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_next %}?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.paginator.num_pages }}{% else %}#{% endif %}">Última</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
