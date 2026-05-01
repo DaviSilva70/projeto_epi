@@ -16,6 +16,11 @@ urlpatterns = [
         name="deletar_colaborador",
     ),
     path("registrar/", views.registrar_retirada, name="registrar_retirada"),
+    path(
+        "registrar/devolucao/<int:registro_id>/",
+        views.registrar_devolucao,
+        name="registrar_devolucao",
+    ),
     path("buscar/", views.buscar_epis_colaborador, name="buscar_epis"),
     path("pdf/", views.gerar_pdf, name="gerar_pdf"),
     path("exportar/excel/", views.exportar_excel, name="exportar_excel"),

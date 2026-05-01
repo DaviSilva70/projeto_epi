@@ -170,3 +170,6 @@ ALLOW_SELF_REGISTRATION = (
     os.environ.get("ALLOW_SELF_REGISTRATION", "True").lower() == "true"
 )
 LIST_PAGE_SIZE = int(os.environ.get("LIST_PAGE_SIZE", "10"))
+
+# Limites
+LIMITE_RETIRADAS_MENSAL = int(os.environ.get("LIMITE_RETIRADAS_MENSAL", "10"))

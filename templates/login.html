@@ -14,68 +14,177 @@
         }
         
         body {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            /* Imagem de fundo cobrindo 100% da tela */
+            background: 
+                linear-gradient(180deg, 
+                    rgba(0, 3, 40, 0.9) 0%, 
+                    rgba(26, 26, 74, 0.85) 50%, 
+                    rgba(0, 3, 40, 0.9) 100%),
+                url('/media/epi_fotos/logo_uni.jpg');
+            background-size: 100% auto;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: fadeInBg 1.2s ease-out;
+        }
+        
+        /* Overlay gradiente para garantir legibilidade do formulário */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, 
+                rgba(0, 3, 40, 0.85) 0%, 
+                rgba(0, 3, 40, 0.7) 50%,
+                rgba(0, 3, 40, 0.85) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes fadeInBg {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
         
         .login-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             overflow: hidden;
-            max-width: 450px;
-            width: 100%;
+            max-width: 420px;
+            width: 90%;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .login-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 30px;
+            padding: 35px 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .login-header i {
             font-size: 3rem;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-header h3 {
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+            font-size: 0.9rem;
         }
         
         .login-body {
-            padding: 40px;
+            padding: 35px 30px;
         }
         
         .form-control {
-            border-radius: 8px;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
         }
         
         .form-control:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 0.2rem rgba(0, 3, 40, 0.25);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 3, 40, 0.1);
         }
         
         .btn-login {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border: none;
-            padding: 12px;
+            padding: 14px;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 10px;
             width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
         
         .btn-login:hover {
             background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 3, 40, 0.3);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        hr {
+            margin: 25px 0;
+            opacity: 0.3;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .login-card {
+                width: 95%;
+                border-radius: 15px;
+            }
+            
+            .login-body {
+                padding: 25px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-card">
         <div class="login-header">
-            <i class="fas fa-hard-hat"></i>
-            <h3 class="mb-0">Sistema de EPI</h3>
+            <i class="fas fa-shield-halved"></i>
+            <h3 class="mb-1">Sistema de EPI</h3>
             <p class="mb-0">Igreja Universal do Reino de Deus</p>
         </div>
         <div class="login-body">
@@ -95,12 +204,22 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label class="form-label">Usuário</label>
-                    <input type="text" name="username" class="form-control" required>
+                    <label class="form-label fw-semibold">Usuário</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-user text-muted"></i>
+                        </span>
+                        <input type="text" name="username" class="form-control border-start-0" placeholder="Digite seu usuário" required>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Senha</label>
-                    <input type="password" name="password" class="form-control" required>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Senha</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-lock text-muted"></i>
+                        </span>
+                        <input type="password" name="password" class="form-control border-start-0" placeholder="Digite sua senha" required>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-login">
                     <i class="fas fa-sign-in-alt me-2"></i> Entrar
@@ -111,8 +230,8 @@
             
             {% if ALLOW_SELF_REGISTRATION %}
             <div class="text-center">
-                <p class="mb-2">Não tem uma conta?</p>
-                <a href="{% url 'register' %}" class="btn btn-outline-primary btn-sm">
+                <p class="text-muted mb-2">Não tem uma conta?</p>
+                <a href="{% url 'register' %}" class="btn btn-outline-primary">
                     <i class="fas fa-user-plus me-1"></i> Criar Conta
                 </a>
             </div>

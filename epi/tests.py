@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
@@ -125,3 +126,150 @@ class ServiceTests(BaseAuthenticatedTestCase):
         registros = list(get_registros_filtrados(self.colaborador))
 
         self.assertEqual([registro.pk for registro in registros], [segundo.pk, primeiro.pk])
+
+
+class EPIModelTests(BaseAuthenticatedTestCase):
+    def test_epi_sem_validade_ca_e_valido(self):
+        epi = EPI.objects.create(ca="CA999", descricao="Teste")
+        self.assertTrue(epi.is_ca_valido)
+
+    def test_epi_com_validade_futura_e_valido(self):
+        from datetime import date, timedelta
+        epi = EPI.objects.create(
+            ca="CA888",
+            descricao="Teste",
+            validade_ca=date.today() + timedelta(days=30),
+        )
+        self.assertTrue(epi.is_ca_valido)
+
+    def test_epi_com_validade_vencida_nao_e_valido(self):
+        from datetime import date, timedelta
+        epi = EPI.objects.create(
+            ca="CA777",
+            descricao="Teste",
+            validade_ca=date.today() - timedelta(days=1),
+        )
+        self.assertFalse(epi.is_ca_valido)
+
+    def test_epi_com_estoque_e_suficiente(self):
+        epi = EPI.objects.create(ca="CA666", descricao="Teste", quantidade_em_estoque=5)
+        self.assertTrue(epi.estoque_suficiente)
+
+    def test_epi_com_estoque_zero_nao_e_suficiente(self):
+        epi = EPI.objects.create(ca="CA555", descricao="Teste", quantidade_em_estoque=0)
+        self.assertFalse(epi.estoque_suficiente)
+
+
+class EstoqueTests(BaseAuthenticatedTestCase):
+    def test_registrar_retirada_decrementa_estoque(self):
+        self.epi.quantidade_em_estoque = 10
+        self.epi.save()
+
+        response = self.client.post(
+            reverse("registrar_retirada"),
+            {"colaborador": self.colaborador.id, "epi": self.epi.id, "quantidade": 3},
+        )
+
+        self.epi.refresh_from_db()
+        self.assertEqual(self.epi.quantidade_em_estoque, 7)
+
+    def test_registrar_retirada_sem_estoque_retorna_erro(self):
+        self.epi.quantidade_em_estoque = 0
+        self.epi.save()
+
+        response = self.client.post(
+            reverse("registrar_retirada"),
+            {"colaborador": self.colaborador.id, "epi": self.epi.id, "quantidade": 1},
+        )
+
+        self.assertContains(response, "Estoque insuficiente")
+        self.assertEqual(RegistroEPI.objects.count(), 0)
+
+
+class ValidadeCATests(BaseAuthenticatedTestCase):
+    def test_registrar_retirada_com_ca_vencido_retorna_erro(self):
+        from datetime import date, timedelta
+        self.epi.validade_ca = date.today() - timedelta(days=1)
+        self.epi.quantidade_em_estoque = 10
+        self.epi.save()
+
+        response = self.client.post(
+            reverse("registrar_retirada"),
+            {"colaborador": self.colaborador.id, "epi": self.epi.id, "quantidade": 1},
+        )
+
+        self.assertContains(response, "vencido")
+        self.assertEqual(RegistroEPI.objects.count(), 0)
+
+
+class LimiteMensalTests(BaseAuthenticatedTestCase):
+    def test_registrar_retirada_excede_limite_mensal(self):
+        self.epi.quantidade_em_estoque = 100
+        self.epi.save()
+
+        for i in range(3):
+            RegistroEPI.objects.create(
+                colaborador=self.colaborador,
+                epi=self.epi,
+                quantidade=1,
+                created_by=self.user,
+            )
+
+        self.assertEqual(RegistroEPI.objects.filter(colaborador=self.colaborador).count(), 3)
+
+
+class DevolucaoTests(BaseAuthenticatedTestCase):
+    def test_devolucao_incrementa_estoque(self):
+        from datetime import date, timedelta
+        self.epi.quantidade_em_estoque = 10
+        self.epi.save()
+        registro = RegistroEPI.objects.create(
+            colaborador=self.colaborador,
+            epi=self.epi,
+            quantidade=5,
+        )
+
+        response = self.client.post(
+            reverse("registrar_devolucao", args=[registro.id]),
+            {"quantidade_devolvida": 3, "observacao": "Devolvido"},
+        )
+
+        self.epi.refresh_from_db()
+        self.assertEqual(self.epi.quantidade_em_estoque, 13)
+        self.assertTrue(hasattr(registro, "devolucao"))
+
+    def test_devolucao_maior_que_retirada_retorna_erro(self):
+        self.epi.quantidade_em_estoque = 10
+        self.epi.save()
+        registro = RegistroEPI.objects.create(
+            colaborador=self.colaborador,
+            epi=self.epi,
+            quantidade=2,
+        )
+
+        response = self.client.post(
+            reverse("registrar_devolucao", args=[registro.id]),
+            {"quantidade_devolvida": 5, "observacao": ""},
+        )
+
+        self.assertContains(response, "não pode exceder")
+
+
+class AuditoriaTests(BaseAuthenticatedTestCase):
+    def test_epi_criado_por_usuario_autenticado(self):
+        response = self.client.post(
+            reverse("cadastrar_epi"),
+            {"ca": "CA-TEST", "descricao": "Teste", "quantidade_em_estoque": 5},
+        )
+
+        epi = EPI.objects.get(ca="CA-TEST")
+        self.assertEqual(epi.created_by, self.user)
+
+    def test_colaborador_criado_por_usuario_autenticado(self):
+        response = self.client.post(
+            reverse("cadastrar_colaborador"),
+            {"nome_completo": "Teste", "matricula": "TEST-001", "funcao": "Teste", "setor": "Teste"},
+        )
+
+        colaborador = Colaborador.objects.get(matricula="TEST-001")
+        self.assertEqual(colaborador.created_by, self.user)

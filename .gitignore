@@ -36,3 +36,6 @@ local_settings.py
 
 # Ruff
 .ruff_cache/
+
+# Personal ignored folder
+_ignorados/

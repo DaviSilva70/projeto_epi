@@ -3,172 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema de EPI{% endblock %}</title>
+    <meta name="description" content="Sistema de Controle de Equipamentos de Proteção Individual - IURD">
+    <meta name="theme-color" content="#000328">
+    <title>{% block title %}Sistema de EPI - IURD{% endblock %}</title>
+    
+    <!-- Preconnect para performance -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
         :root {
             --primary-color: #000328;
             --secondary-color: #1a1a4a;
             --accent-color: #2d2d6a;
-            --bg-light: #f0f0f5;
+            --bg-light: #f8f9fa;
             --bg-card: #ffffff;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
         }
         
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
         }
         
         body {
             background-color: var(--bg-light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         .content-wrapper {
             flex: 1;
         }
         
+        /* Navbar Professional */
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: var(--shadow-md);
+            padding: 0.75rem 0;
         }
         
         .navbar-brand {
             font-weight: 600;
-            letter-spacing: 0.5px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff !important;
         }
         
-        .navbar-brand:hover {
-            opacity: 0.9;
+        .navbar-brand i {
+            font-size: 1.5rem;
         }
         
-        .card {
+        .navbar-toggler {
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 3, 40, 0.15);
-            background-color: var(--bg-card);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 0.5rem;
         }
         
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 3, 40, 0.2);
-        }
-        
-        .card-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border-radius: 12px 12px 0 0 !important;
-            padding: 15px 20px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 3, 40, 0.3);
-        }
-        
-        .btn {
-            transition: all 0.3s ease;
-        }
-        
-        .btn-success {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            border: none;
-        }
-        
-        .btn-success:hover {
-            background: linear-gradient(135deg, #20c997, #28a745);
-            transform: translateY(-1px);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545, #c82333);
-            border: none;
-        }
-        
-        .btn-danger:hover {
-            background: linear-gradient(135deg, #c82333, #dc3545);
-            transform: translateY(-1px);
-        }
-        
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .table thead {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-        }
-        
-        .table tbody tr {
-            transition: background-color 0.2s ease;
-        }
-        
-        .table tbody tr:hover {
-            background-color: rgba(0, 3, 40, 0.05);
-        }
-        
-        .footer {
-            background: var(--primary-color);
-            color: white;
-            padding: 20px 0;
-            margin-top: auto;
+        .navbar-toggler:focus {
+            box-shadow: none;
         }
         
         .nav-link {
-            color: white !important;
-            transition: all 0.3s ease;
-            padding: 8px 15px !important;
-            border-radius: 5px;
-            margin: 0 2px;
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.15);
+        .nav-link:hover, .nav-link:focus {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff !important;
         }
         
         .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff !important;
+        }
+        
+        /* Cards Profissional */
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            background-color: var(--bg-card);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 1rem 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-body {
+            padding: 1.25rem;
+        }
+        
+        /* Botões Profissional */
+        .btn {
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn:focus {
+            box-shadow: 0 0 0 3px rgba(0, 3, 40, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+            color: #fff;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            border: none;
+            color: #fff;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-1px);
+            color: #fff;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
+            border: none;
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            transform: translateY(-1px);
+            color: #fff;
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+        
+        /* Tabelas Profissional */
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.75rem 1rem;
+            border: none;
+            white-space: nowrap;
+        }
+        
+        .table tbody tr {
+            transition: background-color 0.15s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+        
+        .table tbody td {
+            padding: 0.75rem 1rem;
+            vertical-align: middle;
+        }
+        
+        .table-responsive {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        /* Formulários Profissional */
+        .form-control, .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.625rem 0.875rem;
+            font-size: 0.9375rem;
+            transition: all 0.2s ease;
+            background-color: #fff;
         }
         
         .form-control:focus, .form-select:focus {
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 0.2rem rgba(0, 3, 40, 0.25);
+            box-shadow: 0 0 0 3px rgba(45, 45, 106, 0.1);
+            outline: none;
         }
         
-        .form-control, .form-select {
-            border-radius: 8px;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            transition: all 0.3s ease;
+        .form-control::placeholder {
+            color: #9ca3af;
         }
         
-        .form-control:focus, .form-select:focus {
-            border-radius: 8px;
+        .form-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.375rem;
+            font-size: 0.875rem;
         }
         
+        .form-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Alerts Profissional */
         .alert {
-            border-radius: 8px;
             border: none;
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             animation: slideIn 0.3s ease;
         }
         
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .alert-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .alert-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--primary-color);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem 0;
+            margin-top: auto;
+        }
+        
+        /* Badges */
+        .badge {
+            font-weight: 500;
+            padding: 0.35em 0.65em;
+            border-radius: var(--radius-sm);
+        }
+        
+        .badge.bg-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+            color: var(--text-secondary);
+        }
+        
+        /* Search Box */
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box .form-control {
+            padding-left: 2.5rem;
+            border-radius: var(--radius-lg);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        /* Pagination */
+        .pagination {
+            margin-top: 1rem;
+        }
+        
+        .page-link {
+            color: var(--primary-color);
+            border-radius: var(--radius-sm);
+            margin: 0 0.125rem;
+        }
+        
+        .page-link:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .page-item.active .page-link {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: var(--primary-color);
+        }
+        
+        /* Animations */
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -186,80 +395,135 @@
         }
         
         .fade-in {
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.3s ease;
         }
         
-        .card-body {
-            padding: 20px;
+        /* Utility */
+        .text-truncate-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         
-        img {
-            transition: transform 0.3s ease;
-        }
-        
-        img:hover {
-            transform: scale(1.1);
-        }
-        
-        .table-responsive {
-            border-radius: 8px;
-        }
-        
-        .btn-sm {
-            padding: 5px 10px;
-            font-size: 12px;
-        }
-        
+        /* Responsive */
         @media (max-width: 768px) {
             .card {
-                margin-bottom: 20px;
+                margin-bottom: 1rem;
             }
+            
+            .table-responsive {
+                font-size: 0.8125rem;
+            }
+        }
+        
+        /* Dropdown Menu */
+        .dropdown-menu {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .dropdown-item {
+            border-radius: var(--radius-sm);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all 0.15s ease;
+        }
+        
+        .dropdown-item:hover, .dropdown-item:focus {
+            background-color: #f3f4f6;
+            color: var(--primary-color);
+        }
+        
+        .dropdown-item i {
+            width: 1.25rem;
+        }
+        
+        .nav-item.dropdown .nav-link::after {
+            display: inline-block;
+            margin-left: 0.255em;
+            vertical-align: 0.255em;
+            content: "";
+            border-top: 0.3em solid;
+            border-right: 0.3em solid transparent;
+            border-bottom: 0;
+            border-left: 0.3em solid transparent;
+        }
+        
+        .nav-item.dropdown .nav-link:not(.dropdown-toggle)::after {
+            display: none;
+        }
+
+        /* Focus visible for accessibility */
+        :focus-visible {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+        
+        /* Selection */
+        ::selection {
+            background: var(--accent-color);
+            color: #fff;
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="position-absolute top-0 start-0 px-3 py-2 bg-dark text-white" style="transform: translateY(-100%); transition: transform 0.2s;" onclick="this.style.transform='translateY(0)'">Pular para conteúdo principal</a>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark" role="navigation" aria-label="Navegação principal">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <i class="fas fa-hard-hat me-2"></i> Sistema EPI
+            <a class="navbar-brand" href="{% url 'home' %}" aria-label="Página inicial">
+                <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                <span class="d-none d-md-inline">Sistema EPI</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cadastrar_epi' %}">
-                            <i class="fas fa-shield-alt me-1"></i> Cadastrar EPI
+                            <i class="fas fa-shield-heart" aria-hidden="true"></i>
+                            <span>EPIs</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cadastrar_colaborador' %}">
-                            <i class="fas fa-users me-1"></i> Colaboradores
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                            <span>Colaboradores</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'registrar_retirada' %}">
-                            <i class="fas fa-clipboard-list me-1"></i> Registrar Retirada
+                            <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+                            <span>Retiradas</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'buscar_epis' %}">
-                            <i class="fas fa-search me-1"></i> Buscar EPIs
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <span>Buscar</span>
                         </a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <span class="nav-link">
-                            <i class="fas fa-user me-1"></i> {{ user.username }}
+                            <i class="fas fa-user-circle" aria-hidden="true"></i>
+                            <span>{{ user.username }}</span>
                         </span>
                     </li>
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}" class="d-inline">
                             {% csrf_token %}
-                            <button type="submit" class="nav-link border-0 bg-transparent">
-                                <i class="fas fa-sign-out-alt me-1"></i> Sair
+                            <button type="submit" class="nav-link bg-transparent border-0" title="Sair">
+                                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                <span class="d-none d-lg-inline">Sair</span>
                             </button>
                         </form>
                     </li>
@@ -269,29 +533,61 @@
         </div>
     </nav>
 
-    <div class="content-wrapper flex-grow-1">
-        <div class="container mt-4">
+    <main id="main-content" class="content-wrapper flex-grow-1">
+        <div class="container py-4">
+            <!-- Messages -->
             {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
+                <div class="messages-container mb-4" role="alert" aria-live="polite">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle{% elif message.tags == 'warning' %}fa-exclamation-triangle{% else %}fa-info-circle{% endif %}" aria-hidden="true"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
             
             {% block content %}{% endblock %}
         </div>
-    </div>
+    </main>
 
-    <footer class="footer text-center">
+    <footer class="footer" role="contentinfo">
         <div class="container">
-            <p class="mb-0">&copy; 2026 Sistema de Controle de EPI - Igreja Universal do Reino de Deus</p>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <p class="mb-0">&copy; 2026 Sistema de Controle de EPI - IURD</p>
+                <nav aria-label="Links do rodapé">
+                    <small class="text-white-50">Desenvolvido com <i class="fas fa-heart text-danger"></i></small>
+                </nav>
+            </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Scripts otimizados -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    
+    <!-- Script global para enhancements -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-hide alerts after 5 seconds
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    if (alert.classList.contains('show')) {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }
+                }, 5000);
+            });
+            
+            // Add tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

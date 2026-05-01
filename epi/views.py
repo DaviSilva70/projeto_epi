@@ -4,6 +4,7 @@ from .views_cadastros import (
     cadastrar_epi,
     deletar_colaborador,
     editar_colaborador,
+    registrar_devolucao,
     registrar_retirada,
 )
 from .views_dashboard import home

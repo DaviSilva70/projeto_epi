@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Devolução{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-undo-alt me-2"></i>
+                        Registrar Devolução
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <strong>Colaborador:</strong> {{ registro.colaborador.nome_completo }}<br>
+                        <strong>EPI:</strong> {{ registro.epi.ca }} - {{ registro.epi.descricao|truncatewords:5 }}<br>
+                        <strong>Quantidade Retirada:</strong> {{ registro.quantidade }}
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_quantidade_devolvida" class="form-label">
+                                Quantidade Devolvida
+                            </label>
+                            {{ form.quantidade_devolvida }}
+                            {% if form.quantidade_devolvida.errors %}
+                                <div class="text-danger">{{ form.quantidade_devolvida.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="id_observacao" class="form-label">
+                                Observação (opcional)
+                            </label>
+                            {{ form.observacao }}
+                            {% if form.observacao.errors %}
+                                <div class="text-danger">{{ form.observacao.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'registrar_retirada' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Voltar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check me-1"></i> Registrar Devolução
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

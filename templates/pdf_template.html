@@ -15,218 +15,278 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --primary: #000328;
+            --primary-light: #1a1a4a;
+            --primary-lighter: #2d2d6a;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --neutral-50: #f9fafb;
+            --neutral-100: #f3f4f6;
+            --neutral-200: #e5e7eb;
+            --neutral-400: #9ca3af;
+            --neutral-500: #6b7280;
+            --neutral-700: #374151;
+            --neutral-900: #111827;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        /* xhtml2pdf requires actual color values, not CSS variables */
+        body { background-color: #f3f4f6; color: #111827; }
+        .header { border-bottom-color: #000328; }
+        .logo { background: #000328; }
+        .header-info h1 { color: #000328; }
+        .header-org .org-name { color: #000328; }
+        .doc-card { background: #f9fafb; border-color: #e5e7eb; border-left-color: #000328; }
+        .doc-card h2 { color: #000328; }
+        .doc-card p { color: #6b7280; }
+        .section-header { border-bottom-color: #e5e7eb; }
+        .section-badge { background: #000328; }
+        .section-title { color: #000328; }
+        .data-card { border-color: #e5e7eb; }
+        .data-card-header { background: #000328; }
+        .info-label { color: #6b7280; }
+        .info-value { background: #f9fafb; border-left-color: #1a1a4a; color: #111827; }
+        .table-card { border-color: #e5e7eb; }
+        .table-card-header { background: #000328; }
+        thead th { color: #000328; background: #f9fafb; border-bottom-color: #e5e7eb; }
+        tbody td { color: #374151; border-bottom-color: #f3f4f6; }
+        tbody tr:nth-child(even) { background: #f9fafb; }
+        tbody tr:hover { background: #f3f4f6; }
+        .epi-name { color: #111827; }
+        .ca-badge { background: #f3f4f6; color: #000328; border-color: #e5e7eb; }
+        .date-text { color: #6b7280; }
+        .empty-state { color: #9ca3af; }
+        .footer { border-top-color: #e5e7eb; }
+        .footer-left .org { color: #000328; }
+        .footer-left .system { color: #9ca3af; }
+        .footer-right .date { color: #6b7280; }
+        .footer-right .page-info { color: #9ca3af; }
+        .watermark { color: #000328; }
+        
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #2c3e50;
-            font-size: 12px;
-            line-height: 1.5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f3f4f6;
+            color: #111827;
+            font-size: 11px;
+            line-height: 1.6;
         }
         
         .page {
             width: 210mm;
             min-height: 297mm;
-            padding: 25mm 20mm;
+            padding: 22mm 18mm;
             margin: 0 auto;
             background: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
         }
         
+        /* Header profissional */
         .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #1a237e;
-            text-align: center;
-        }
-        
-        .header-content {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .header-top {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #000328;
             display: flex;
             justify-content: space-between;
-            width: 100%;
             align-items: center;
-            margin-bottom: 15px;
         }
         
-        .logo-box {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
-            border-radius: 50%;
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: #000328;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
-        }
-        
-        .header-title h1 {
-            font-size: 26px;
-            color: #1a237e;
+            font-size: 18px;
             font-weight: 700;
-            letter-spacing: 2px;
-            margin: 0;
         }
         
-        .header-title p {
-            font-size: 11px;
-            color: #666;
-            margin-top: 5px;
+        .header-info h1 {
+            font-size: 20px;
+            color: #000328;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
         }
         
-        .header-right {
+        .header-info p {
+            font-size: 9px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .header-org {
             text-align: right;
         }
         
-        .header-right .org-name {
-            font-size: 18px;
+        .header-org .org-name {
+            font-size: 16px;
             font-weight: 700;
-            color: #1a237e;
-            margin-bottom: 5px;
+            color: #000328;
+            margin-bottom: 2px;
         }
         
-        .header-right .doc-info {
-            font-size: 10px;
-            color: #888;
+        .header-org .org-subtitle {
+            font-size: 9px;
+            color: #6b7280;
         }
         
-        .doc-meta {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-left: 4px solid #1a237e;
-            padding: 20px 25px;
-            margin-bottom: 25px;
-            border-radius: 0 8px 8px 0;
-            text-align: justify;
+        /* Document metadata card */
+        .doc-card {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #000328;
         }
         
-        .doc-meta h2 {
-            font-size: 18px;
-            color: #1a237e;
+        .doc-card h2 {
+            font-size: 14px;
+            color: #000328;
             font-weight: 600;
-            margin-bottom: 10px;
-            text-align: center;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .doc-meta p {
-            font-size: 11px;
-            color: #555;
-            line-height: 1.6;
+        .doc-card p {
+            font-size: 10px;
+            color: #6b7280;
+            line-height: 1.5;
         }
         
+        /* Section */
         .section {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .section-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
         }
         
-        .section-icon {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+        .section-badge {
+            width: 28px;
+            height: 28px;
+            background: #000328;
             border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 14px;
+            font-size: 12px;
+            font-weight: 600;
         }
         
         .section-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #1a237e;
+            font-size: 11px;
+            font-weight: 600;
+            color: #000328;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
         
-        .collaborator-card {
+        /* Collaborator card */
+        .data-card {
             background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
             overflow: hidden;
         }
         
-        .collaborator-header {
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+        .data-card-header {
+            background: #000328;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 16px;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            letter-spacing: 0.3px;
         }
         
-        .collaborator-body {
-            padding: 20px;
+        .data-card-body {
+            padding: 16px;
         }
         
         .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 14px;
         }
         
-        .info-box {
+        .info-item {
             display: flex;
             flex-direction: column;
         }
         
         .info-label {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
-            color: #666;
+            color: #6b7280;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
         }
         
         .info-value {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 500;
-            color: #2c3e50;
-            padding: 10px 15px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #111827;
+            padding: 8px 12px;
+            background: #f9fafb;
             border-radius: 6px;
-            border-left: 3px solid #3949ab;
+            border-left: 3px solid #1a1a4a;
         }
         
+        /* Table */
         .table-card {
             background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
             overflow: hidden;
         }
         
-        .table-header {
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+        .table-card-header {
+            background: #000328;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 16px;
             font-weight: 600;
-            font-size: 12px;
+            font-size: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
         }
         
-        .table-container {
-            overflow-x: auto;
+        .table-card-header span:first-child {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .table-count {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 9px;
         }
         
         table {
@@ -234,166 +294,159 @@
             border-collapse: collapse;
         }
         
-        thead {
-            background: #f5f5f5;
-        }
-        
-        th {
-            padding: 14px 15px;
+        thead th {
+            padding: 10px 12px;
             text-align: left;
-            font-size: 11px;
-            font-weight: 700;
-            color: #1a237e;
+            font-size: 9px;
+            font-weight: 600;
+            color: #000328;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid #e0e0e0;
-            background: #f8f9fa;
+            letter-spacing: 0.3px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
         }
         
-        td {
-            padding: 14px 15px;
-            font-size: 12px;
-            color: #2c3e50;
-            border-bottom: 1px solid #eee;
+        tbody td {
+            padding: 10px 12px;
+            font-size: 10px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
             vertical-align: middle;
         }
         
-        tbody tr:hover {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-        
         tbody tr:nth-child(even) {
-            background: #fafbfc;
+            background: #f9fafb;
         }
         
-        tbody tr:nth-child(even):hover {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-        
-        tbody tr:last-child td {
-            border-bottom: none;
+        tbody tr:hover {
+            background: #f3f4f6;
         }
         
         .epi-name {
             font-weight: 500;
-            color: #2c3e50;
+            color: #111827;
         }
         
-        .ca-number {
+        .ca-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
-            color: #1a237e;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 10px;
+            background: #f3f4f6;
+            color: #000328;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .qty-badge {
+            display: inline-block;
+            background: #d1fae5;
+            color: #065f46;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 9px;
             font-weight: 600;
         }
         
-        .quantity {
-            display: inline-block;
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            color: #2e7d32;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 600;
-        }
-        
-        .date {
-            color: #666;
-            font-size: 10px;
+        .date-text {
+            color: #6b7280;
+            font-size: 9px;
         }
         
         .status-badge {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 8px;
             font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
         
         .status-active {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #1565c0;
+            background: #dbeafe;
+            color: #1e40af;
         }
         
+        .status-devolved {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
-            color: #999;
+            padding: 30px 20px;
+            color: #9ca3af;
         }
         
-        .empty-state .icon {
-            font-size: 40px;
-            color: #ddd;
-            margin-bottom: 15px;
+        .empty-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            opacity: 0.5;
         }
         
+        .empty-text {
+            font-size: 11px;
+        }
+        
+        /* Footer */
         .footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .footer-left {
-            text-align: left;
-        }
-        
         .footer-left .org {
-            font-size: 12px;
-            font-weight: 700;
-            color: #1a237e;
+            font-size: 10px;
+            font-weight: 600;
+            color: #000328;
         }
         
         .footer-left .system {
-            font-size: 9px;
-            color: #888;
-            margin-top: 3px;
-        }
-        
-        .footer-right {
-            text-align: right;
+            font-size: 8px;
+            color: #9ca3af;
+            margin-top: 2px;
         }
         
         .footer-right .date {
-            font-size: 10px;
-            color: #666;
-        }
-        
-        .footer-right .page-num {
             font-size: 9px;
-            color: #aaa;
-            margin-top: 3px;
+            color: #6b7280;
+            text-align: right;
         }
         
+        .footer-right .page-info {
+            font-size: 8px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+        
+        /* Watermark */
         .watermark {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            opacity: 0.1;
-            font-size: 60px;
-            font-weight: 700;
-            color: #1a237e;
-            transform: rotate(-30deg);
+            bottom: 30px;
+            right: 30px;
+            opacity: 0.08;
+            font-size: 72px;
+            font-weight: 800;
+            color: #000328;
+            transform: rotate(-25deg);
             pointer-events: none;
+            letter-spacing: 4px;
         }
         
+        /* Print styles */
         @media print {
-            body {
-                background: white;
+            body { background: white; }
+            .page { 
+                box-shadow: none; 
+                margin: 0; 
+                padding: 15mm;
             }
-            
-            .page {
-                box-shadow: none;
-                margin: 0;
-                padding: 20mm;
-            }
-            
-            .header, .collaborator-header, .table-header {
+            .header, .data-card-header, .table-card-header {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -402,125 +455,119 @@
 </head>
 <body>
     <div class="page">
-        <div class="header">
-            <div class="header-top">
-                <div class="logo-box">EPI</div>
-                <div class="header-right">
-                    <div class="org-name">IURD</div>
-                    <div class="doc-info">Igreja Universal do Reino de Deus</div>
-                </div>
-            </div>
-            <div class="header-content">
-                <div class="header-title">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-brand">
+                <div class="logo">EPI</div>
+                <div class="header-info">
                     <h1>RELATÓRIO DE EPI</h1>
                     <p>Controle de Equipamentos de Proteção Individual</p>
                 </div>
             </div>
+            <div class="header-org">
+                <div class="org-name">IURD</div>
+                <div class="org-subtitle">Igreja Universal do Reino de Deus</div>
+            </div>
+        </header>
+        
+        <!-- Document info -->
+        <div class="doc-card">
+            <h2>● Demonstrativo de Entrega de EPIs</h2>
+            <p>Documento oficial de controle de EPI. Este relatório apresenta todos os equipamentos de proteção individual distribuídos ao colaborador.</p>
         </div>
         
-        <div class="doc-meta">
-            <h2>📋 Demonstrativo de Entrega de EPIs</h2>
-            <p>Documento gerado automaticamente pelo sistema de controle. Este relatório apresenta todos os equipamentos de proteção individual distribuídos ao colaborador.</p>
-        </div>
-        
-        <div class="section">
+        <!-- Collaborator data -->
+        <section class="section">
             <div class="section-header">
-                <div class="section-icon">👤</div>
+                <div class="section-badge">01</div>
                 <div class="section-title">Dados do Colaborador</div>
             </div>
             
-            <div class="collaborator-card">
-                <div class="collaborator-header">
-                    <span>📁</span> Informações Pessoais
+            <div class="data-card">
+                <div class="data-card-header">
+                    ● Informações Pessoais
                 </div>
-                <div class="collaborator-body">
+                <div class="data-card-body">
                     <div class="info-grid">
-                        <div class="info-box">
+                        <div class="info-item">
                             <span class="info-label">Nome Completo</span>
                             <span class="info-value">{{ colaborador.nome_completo }}</span>
                         </div>
-                        <div class="info-box">
+                        <div class="info-item">
                             <span class="info-label">Matrícula</span>
                             <span class="info-value">{{ colaborador.matricula }}</span>
                         </div>
-                        <div class="info-box">
+                        <div class="info-item">
                             <span class="info-label">Função</span>
                             <span class="info-value">{{ colaborador.funcao }}</span>
                         </div>
-                        <div class="info-box">
+                        <div class="info-item">
                             <span class="info-label">Setor</span>
                             <span class="info-value">{{ colaborador.setor }}</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
         
-        <div class="section">
+        <!-- EPI Records -->
+        <section class="section">
             <div class="section-header">
-                <div class="section-icon">📦</div>
+                <div class="section-badge">02</div>
                 <div class="section-title">Histórico de EPIs Recebidos</div>
             </div>
             
             <div class="table-card">
-                <div class="table-header">
-                    <span>📋</span> Registros de Entrega ({{ registros.count }})
+                <div class="table-card-header">
+                    <span>● Registros de Entrega</span>
+                    <span class="table-count">{{ registros.count }} itens</span>
                 </div>
-                <div class="table-container">
-                    {% if registros %}
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Equipamento</th>
-                                <th>Certificado CA</th>
-                                <th>Qtd</th>
-                                <th>Data Entrega</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for reg in registros %}
-                            <tr>
-                                <td>
-                                    <span class="epi-name">{{ reg.epi.descricao }}</span>
-                                </td>
-                                <td>
-                                    <span class="ca-number">CA {{ reg.epi.ca }}</span>
-                                </td>
-                                <td>
-                                    <span class="quantity">{{ reg.quantidade }}</span>
-                                </td>
-                                <td>
-                                    <span class="date">{{ reg.data_retirada|date:"d/m/Y" }}</span>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-active">Entregue</span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% else %}
-                    <div class="empty-state">
-                        <div class="icon">📭</div>
-                        <p>Nenhum registro de EPI encontrado para este colaborador.</p>
-                    </div>
-                    {% endif %}
+                
+                {% if registros %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Equipamento</th>
+                            <th>Certificado CA</th>
+                            <th>Qtd</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registros %}
+                        <tr>
+                            <td><span class="epi-name">{{ reg.epi.descricao }}</span></td>
+                            <td><span class="ca-badge">CA {{ reg.epi.ca }}</span></td>
+                            <td><span class="qty-badge">{{ reg.quantidade }}</span></td>
+                            <td><span class="date-text">{{ reg.data_retirada|date:"d/m/Y" }}</span></td>
+                            <td><span class="status-badge status-active">Entregue</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">○</div>
+                    <p class="empty-text">Nenhum registro de EPI encontrado para este colaborador.</p>
                 </div>
+                {% endif %}
             </div>
-        </div>
+        </section>
         
-        <div class="footer">
+        <!-- Footer -->
+        <footer class="footer">
             <div class="footer-left">
                 <div class="org">Igreja Universal do Reino de Deus</div>
                 <div class="system">Sistema de Controle de EPI v1.0</div>
             </div>
             <div class="footer-right">
-                <div class="date">Emitido em {% now "d/m/Y às H:i" %}</div>
-                <div class="page-num">Página 1</div>
+                <div class="date">Emitido em {% now "d/m/Y" %}</div>
+                <div class="page-info">Página 1 de 1</div>
             </div>
-        </div>
+        </footer>
         
+        <!-- Watermark -->
         <div class="watermark">IURD</div>
     </div>
 </body>

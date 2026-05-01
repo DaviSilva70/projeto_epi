@@ -1,12 +1,19 @@
+from datetime import date
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from .forms import ColaboradorForm, EPIForm, RegistroEPIForm
-from .models import Colaborador, EPI, RegistroEPI
+from .models import Colaborador, EPI, RegistroEPI, DevolucaoEPI
+
+
+def _get_limite_mensal():
+    return getattr(settings, "LIMITE_RETIRADAS_MENSAL", 10)
 
 
 def _paginate_queryset(request, queryset):
@@ -19,7 +26,9 @@ def cadastrar_epi(request):
     if request.method == "POST":
         form = EPIForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            epi = form.save(commit=False)
+            epi.created_by = request.user
+            epi.save()
             messages.success(request, "EPI cadastrado com sucesso!")
             return redirect("cadastrar_epi")
     else:
@@ -48,7 +57,9 @@ def cadastrar_colaborador(request):
     if request.method == "POST":
         form = ColaboradorForm(request.POST)
         if form.is_valid():
-            form.save()
+            colaborador = form.save(commit=False)
+            colaborador.created_by = request.user
+            colaborador.save()
             messages.success(request, "Colaborador cadastrado com sucesso!")
             return redirect("cadastrar_colaborador")
     else:
@@ -96,14 +107,41 @@ def registrar_retirada(request):
     if request.method == "POST":
         form = RegistroEPIForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Retirada registrada com sucesso!")
+            epi = form.cleaned_data["epi"]
+            quantidade = form.cleaned_data["quantidade"]
+            colaborador = form.cleaned_data["colaborador"]
+
+            limite_mensal = _get_limite_mensal()
+
+            total_mes_atual = RegistroEPI.objects.filter(
+                colaborador=colaborador,
+                data_retirada__month=timezone.now().month,
+                data_retirada__year=timezone.now().year,
+            ).aggregate(total=Sum("quantidade"))["total"] or 0
+
+            if total_mes_atual + quantidade > limite_mensal:
+                messages.error(
+                    request,
+                    f"Limite de {limite_mensal} EPIs por mês excedido. "
+                    f"Você já retirou {total_mes_atual} este mês.",
+                )
+            else:
+                registro = form.save(commit=False)
+                registro.created_by = request.user
+                registro.save()
+
+                epi.quantidade_em_estoque -= quantidade
+                epi.save()
+
+                messages.success(request, "Retirada registrada com sucesso!")
             return redirect("registrar_retirada")
     else:
         form = RegistroEPIForm()
 
-    registros = RegistroEPI.objects.select_related("colaborador", "epi").order_by(
-        "-data_retirada"
+    registros = (
+        RegistroEPI.objects.select_related("colaborador", "epi")
+        .prefetch_related("devolucao")
+        .order_by("-data_retirada")
     )
     page_obj = _paginate_queryset(request, registros)
     return render(
@@ -111,3 +149,32 @@ def registrar_retirada(request):
         "registrar_retirada.html",
         {"form": form, "registros": page_obj, "page_obj": page_obj},
     )
+
+
+@login_required
+def registrar_devolucao(request, registro_id):
+    from .forms import DevolucaoEPIForm
+
+    registro = get_object_or_404(RegistroEPI, id=registro_id)
+
+    if hasattr(registro, "devolucao"):
+        messages.error(request, "Esta retirada já possui uma devolução registrada.")
+        return redirect("registrar_retirada")
+
+    if request.method == "POST":
+        form = DevolucaoEPIForm(request.POST, registro=registro)
+        if form.is_valid():
+            devolucao = form.save(commit=False)
+            devolucao.registro = registro
+            devolucao.created_by = request.user
+            devolucao.save()
+
+            registro.epi.quantidade_em_estoque += devolucao.quantidade_devolvida
+            registro.epi.save()
+
+            messages.success(request, "Devolução registrada com sucesso!")
+            return redirect("registrar_retirada")
+    else:
+        form = DevolucaoEPIForm(registro=registro)
+
+    return render(request, "registrar_devolucao.html", {"form": form, "registro": registro, "quantidade_retirada": registro.quantidade})
